@@ -3,7 +3,7 @@
 
 #define __MCACHEFS_VERSION__ "0.6.0"
 
-#define FUSE_USE_VERSION 29
+#define FUSE_USE_VERSION 31 
 
 #ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
@@ -15,7 +15,7 @@
 #ifndef _ATFILE_SOURCE
 #define _ATFILE_SOURCE
 #endif
-#define __USE_GNU
+#define __GNU_SOURCE
 #endif
 
 #include <fuse.h>

@@ -8,7 +8,7 @@
 /*********************************************************************/
 /*                    FUSE CALLBACKS                                 */
 /*********************************************************************/
-
+#include <utime.h>
 #include "mcachefs.h"
 #include "mcachefs-io.h"
 #include "mcachefs-journal.h"
@@ -57,10 +57,10 @@ mcachefs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 
     memset(&st, 0, sizeof(struct stat));
     st.st_mode = S_IFDIR;
-    res = filler(buf, ".", &st, 0);
+    res = filler(buf, ".", &st, 0, 0);
     if (res)
         return res;
-    res = filler(buf, "..", &st, 0);
+    res = filler(buf, "..", &st, 0,0 );
     if (res)
         return res;
 
@@ -75,7 +75,7 @@ mcachefs_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
     {
         Log("READDIR    '%s' (%p, next=%llu)\n", mchild->d_name, mchild,
             mchild->next);
-        res = filler(buf, mchild->d_name, &(mchild->st), 0);
+        res = filler(buf, mchild->d_name, &(mchild->st), 0, 0);
         if (res)
             break;
     }
@@ -714,19 +714,41 @@ mcachefs_destroy(void *conn)
 }
 
 struct fuse_operations mcachefs_oper =
-    {.getattr = mcachefs_getattr,.readlink = mcachefs_readlink,
-    .getdir = NULL,.mknod = mcachefs_mknod,.mkdir = mcachefs_mkdir,
-    .unlink = mcachefs_unlink,.rmdir = mcachefs_rmdir,.symlink =
-        mcachefs_symlink,.rename = mcachefs_rename,.link =
-        mcachefs_link,.chmod = mcachefs_chmod,.chown =
-        mcachefs_chown,.truncate = mcachefs_truncate,.utime =
-        mcachefs_utime,.open = mcachefs_open,
-    .read = mcachefs_read,.write = mcachefs_write,.statfs = NULL,
-    .flush = mcachefs_flush,.release = mcachefs_release,.fsync =
-        mcachefs_fsync,.setxattr = NULL,.getxattr = NULL,
-    .listxattr = NULL,.opendir = NULL,.readdir = mcachefs_readdir,
-    .fsyncdir = NULL,.init = mcachefs_init,
-    .destroy = mcachefs_destroy,.access = NULL,.create = NULL,
-    .ftruncate = NULL,.fgetattr = NULL,.lock = NULL,.utimens = NULL,
-    .bmap = NULL,
+    {
+	    .getattr = mcachefs_getattr,
+	    .readlink = mcachefs_readlink,
+	    //.getdir = NULL,
+	    .mknod = mcachefs_mknod,
+	    .mkdir = mcachefs_mkdir,
+	    .unlink = mcachefs_unlink,
+	    .rmdir = mcachefs_rmdir,
+	    .symlink = mcachefs_symlink,
+	    .rename = mcachefs_rename,
+	    .link =   mcachefs_link,
+	    .chmod = mcachefs_chmod,
+	    .chown = mcachefs_chown,
+	    .truncate = mcachefs_truncate,
+	    .utimens = mcachefs_utime,
+	    .open = mcachefs_open,
+	    .read = mcachefs_read,
+	    .write = mcachefs_write,
+	    //.statfs = NULL,
+	    .flush = mcachefs_flush,
+	    .release = mcachefs_release,
+	    .fsync = mcachefs_fsync,
+	    //.setxattr = NULL,
+	    //.getxattr = NULL,
+	    //.listxattr = NULL,
+	    //.opendir = NULL,
+	    .readdir = mcachefs_readdir,
+	    //.fsyncdir = NULL,
+	    .init = mcachefs_init,
+	    .destroy = mcachefs_destroy,
+	    //.access = NULL,
+	    //.create = NULL,
+	    //.ftruncate = NULL,
+	    //.fgetattr = NULL,
+	    //.lock = NULL,
+	    //.utimens = NULL,
+	    //.bmap = NULL,
 };
