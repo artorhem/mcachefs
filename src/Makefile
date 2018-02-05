@@ -5,7 +5,7 @@ OBJECTS += mcachefs-io.o mcachefs-lowlevel.o mcachefs-hash.o
 OBJECTS += mcachefs-config.o
 CC = gcc
 
-# CFLAGS += -g -O0
+ CFLAGS += -g -O0
 # CFLAGS += -O0 -pg -g -DDEBUG -D__MCACHEFS_MUTEX_DEBUG 
 # CFLAGS += -O3 -pg -g -fprofile-arcs
 CFLAGS += -O3
